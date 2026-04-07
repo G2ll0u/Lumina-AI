@@ -1,8 +1,8 @@
-# Lumina AI - Local RAG Assistant for Technical Documentation
+# Lumina AI - Local RAG Assistant for Documentation
 
-Lumina is an open-source AI assistant that answers questions from **your own technical documents**. It runs 100% locally — no cloud, no data leakage.
+Lumina is an open-source AI assistant that answers questions from **your documents**. It runs 100% locally — no cloud, no data leakage.
 
-Built for teams managing complex documentation (maintenance manuals, electrical schematics, spare parts lists, etc.) who need fast, accurate answers without sending data to external APIs.
+Built for teams managing documentation who need fast, accurate answers without sending data to external APIs.
 
 ---
 
@@ -10,7 +10,7 @@ Built for teams managing complex documentation (maintenance manuals, electrical 
 
 - **Hybrid RAG + Reranking** — Combines semantic search (vector) and keyword search (BM25) with a CrossEncoder reranker for high-precision retrieval.
 - **Expert Knowledge Loop** — Experts can correct wrong answers via thumbs-down feedback. Corrections are stored as verified knowledge and prioritized in future searches.
-- **Multi-asset filtering** — Organize documents by asset ID (equipment, machine, product line...). Queries are scoped to the selected asset.
+- **Multi-asset filtering** — Organize documents by asset ID. Queries are scoped to the selected asset.
 - **Integrated document management** — Upload, delete and re-index PDF/DOCX files directly from the UI.
 - **Session history** — Persistent conversation history with auto-naming and session management.
 - **100% local** — All inference and embeddings run on your hardware via Ollama or any OpenAI-compatible API.
@@ -141,9 +141,9 @@ Lumina learns from your domain experts:
 
 ## Document Organization
 
-Documents are organized by **asset ID** — a free-form string that groups related files (e.g., equipment serial number, project code, product line).
+Documents are organized by **asset ID** — a free-form string that groups related files.
 
-The asset ID is extracted automatically from the folder structure: a folder named `3965 - Machine Name` gives asset ID `3965`. You can also set it manually via the document manager UI.
+The asset ID is extracted automatically from the folder structure: a folder named `3965 - XXXXXXXX` gives asset ID `3965`. You can also set it manually via the document manager UI.
 
 ---
 
