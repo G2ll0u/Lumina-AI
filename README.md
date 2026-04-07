@@ -126,6 +126,8 @@ python -m app.ingest
 - **Dev mode** (no `SECRET_KEY` set): API is fully open, a warning is logged at startup.
 - **Production**: set `SECRET_KEY` in `.env`. All API calls must include `Authorization: Bearer <your-key>`.
 
+You can enter your key in the settings modal. It will be stored in the local storage of your browser.
+
 ---
 
 ## Expert Knowledge

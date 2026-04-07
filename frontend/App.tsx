@@ -22,9 +22,14 @@ const App: React.FC = () => {
       } else if (data.length === 0) {
         await createNewSession();
       }
-    } catch (e) {
-      console.error("Erreur lors du chargement des sessions:", e);
-      if (sessions.length === 0) await createNewSession();
+    } catch (e: any) {
+      if (e.message?.includes("401_UNAUTHORIZED")) {
+        alert("🛡️ Connexion bloquée (401 Unauthorized).\n\nLe backend requiert un mot de passe (SECRET_KEY).\nVeuillez renseigner votre Clé API Secrète dans les Paramètres Locaux (roue crantée) pour déverrouiller l'accès.");
+        setIsSettingsOpen(true);
+      } else {
+        console.error("Erreur lors du chargement des sessions:", e);
+        if (sessions.length === 0) await createNewSession();
+      }
     } finally {
       setIsInitializing(false);
     }
@@ -202,14 +207,18 @@ const App: React.FC = () => {
             : s
         ));
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMsg = error.message?.includes("401_UNAUTHORIZED")
+        ? "🔒 Erreur 401 Unauthorized : Votre Clé API Secrète est manquante ou invalide. Veuillez la configurer dans les paramètres locaux."
+        : "Désolé, il y a un problème. Veuillez vérifier votre connexion ou vos paramètres. Si le problème persiste, veuillez contacter l'administrateur.";
+
       setSessions(prev => prev.map(s =>
         s.id === dynamicSessionId
           ? {
             ...s,
             messages: s.messages.map(m =>
               m.id === assistantMsgId
-                ? { ...m, content: "Désolé, il y a un problème. Veuillez vérifier votre connexion ou votre clé API. Si le problème persiste, veuillez contacter l'administrateur.", isStreaming: false }
+                ? { ...m, content: errorMsg, isStreaming: false }
                 : m
             )
           }

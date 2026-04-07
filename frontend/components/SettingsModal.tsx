@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { api } from '../services/apiService';
 
 export interface LocalSettings {
+    apiKey: string;
     temperature: number;
     rag_top_k: number;
     use_decomposition: boolean;
@@ -11,6 +12,7 @@ export interface LocalSettings {
 }
 
 export const defaultSettings: LocalSettings = {
+    apiKey: "",
     temperature: 0.1,
     rag_top_k: 6,
     use_decomposition: true,
@@ -171,6 +173,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, s
                                 </h3>
 
                                 <div className="space-y-3 bg-zinc-900/30 p-4 rounded-xl border border-zinc-800/50">
+                                    <div>
+                                        <div className="flex justify-between mb-1">
+                                            <label className="text-sm font-medium text-zinc-300">
+                                                <i className="fa-solid fa-key mr-2"></i>Clé API Secrète (Serveur)
+                                            </label>
+                                        </div>
+                                        <div className="text-xs text-zinc-500 mb-2 block">
+                                            Laissez vide si le backend est en accès libre.
+                                        </div>
+                                        <input
+                                            type="password"
+                                            value={localSettings.apiKey || ""}
+                                            onChange={(e) => setLocalSettings({ ...localSettings, apiKey: e.target.value })}
+                                            placeholder="••••••••••••••••"
+                                            autoComplete="new-password"
+                                            className="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                                        />
+                                    </div>
+                                    <hr className="border-zinc-800/50 my-2" />
                                     <div>
                                         <div className="flex justify-between mb-1">
                                             <label className="text-sm font-medium text-zinc-300">

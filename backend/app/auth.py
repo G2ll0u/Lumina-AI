@@ -1,3 +1,8 @@
+import os
+import secrets
+from typing import Optional
+
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 load_dotenv()
@@ -19,7 +24,7 @@ async def get_current_user(
         print("[WARNING] SECRET_KEY is not set. API is open to all requests.")
         return {"sub": "anonymous", "roles": ["user"]}
 
-    if credentials is None or credentials.credentials != SECRET_KEY:
+    if credentials is None or not secrets.compare_digest(credentials.credentials, SECRET_KEY):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or missing Bearer token.",

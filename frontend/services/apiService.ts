@@ -4,6 +4,29 @@ import { ModelType } from "../types";
 import { LocalSettings } from '../components/SettingsModal';
 
 export class ApiService {
+    private getAuthHeader(): Record<string, string> {
+        const settingsRaw = localStorage.getItem('lumina-settings');
+        if (settingsRaw) {
+            try {
+                const parsed = JSON.parse(settingsRaw);
+                if (parsed.apiKey) {
+                    return { 'Authorization': `Bearer ${parsed.apiKey}` };
+                }
+            } catch (e) {}
+        }
+        return {};
+    }
+
+    private async handleResponse(response: Response) {
+        if (response.status === 401) {
+            throw new Error("401_UNAUTHORIZED");
+        }
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.statusText}`);
+        }
+        return response;
+    }
+
     async *streamChat(prompt: string, previousMessages: { role: string, content: string }[] = [], model: ModelType = ModelType.LLAMA_3B, useSearch: boolean = false, machineNumber?: string, sessionId?: string, settings?: LocalSettings) {
         try {
             const body: any = {
@@ -24,13 +47,12 @@ export class ApiService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...this.getAuthHeader()
                 },
                 body: JSON.stringify(body),
             });
 
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
-            }
+            await this.handleResponse(response);
 
             // Extract sources from header
             const sourcesHeader = response.headers.get("X-Sources");
@@ -93,7 +115,7 @@ export class ApiService {
 
     async checkModelStatus(): Promise<{ Ollama_Running: boolean, Llama_Installed: boolean, Models: string[] }> {
         try {
-            const response = await fetch('/status');
+            const response = await fetch('/status', { headers: { ...this.getAuthHeader() } });
             if (response.ok) {
                 return await response.json();
             }
@@ -104,15 +126,15 @@ export class ApiService {
     }
 
     async getSessions(): Promise<any[]> {
-        const response = await fetch('/api/sessions');
-        if (!response.ok) throw new Error("Failed to fetch sessions");
+        const response = await fetch('/api/sessions', { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         const data = await response.json();
         return data.map((s: any) => ({ ...s, messages: s.messages || [] }));
     }
 
     async getSession(sessionId: string): Promise<any> {
-        const response = await fetch(`/api/sessions/${sessionId}`);
-        if (!response.ok) throw new Error("Failed to fetch session");
+        const response = await fetch(`/api/sessions/${sessionId}`, { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         const session = await response.json();
         if (session.messages) {
             session.messages = session.messages.map((m: any) => ({
@@ -126,52 +148,52 @@ export class ApiService {
     async renameSession(sessionId: string, title: string): Promise<void> {
         const response = await fetch(`/api/sessions/${sessionId}/title`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...this.getAuthHeader() },
             body: JSON.stringify({ title })
         });
-        if (!response.ok) throw new Error("Failed to rename session");
+        await this.handleResponse(response);
     }
 
     async deleteSession(sessionId: string): Promise<void> {
-        const response = await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error("Failed to delete session");
+        const response = await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE', headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
     }
 
     async createSession(): Promise<{ id: string, title: string }> {
-        const response = await fetch('/api/sessions', { method: 'POST' });
-        if (!response.ok) throw new Error("Failed to create session");
+        const response = await fetch('/api/sessions', { method: 'POST', headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         return await response.json();
     }
 
     async getFeedbacks(): Promise<any[]> {
-        const response = await fetch('/api/feedback');
-        if (!response.ok) throw new Error("Failed to fetch feedbacks");
+        const response = await fetch('/api/feedback', { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         return await response.json();
     }
 
     async deleteFeedback(index: number): Promise<void> {
-        const response = await fetch(`/api/feedback/${index}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error("Failed to delete feedback");
+        const response = await fetch(`/api/feedback/${index}`, { method: 'DELETE', headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
     }
 
     async addVerifiedKnowledge(question: string, answer: string, machineId?: string, feedbackIndex?: number): Promise<void> {
         const response = await fetch('/api/verified_knowledge', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...this.getAuthHeader() },
             body: JSON.stringify({ question, answer, machine_id: machineId, feedback_index: feedbackIndex })
         });
-        if (!response.ok) throw new Error("Failed to add verified knowledge");
+        await this.handleResponse(response);
     }
 
     async getVerifiedKnowledge(): Promise<any[]> {
-        const response = await fetch('/api/verified_knowledge');
-        if (!response.ok) throw new Error("Failed to fetch verified knowledge");
+        const response = await fetch('/api/verified_knowledge', { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         return await response.json();
     }
 
     async deleteVerifiedKnowledge(id: string): Promise<void> {
-        const response = await fetch(`/api/verified_knowledge/${id}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error("Failed to delete verified knowledge");
+        const response = await fetch(`/api/verified_knowledge/${id}`, { method: 'DELETE', headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
     }
 
     async analyzeImage(prompt: string, base64Image: string, model: ModelType = ModelType.LLAMA_3B): Promise<string> {
@@ -180,6 +202,7 @@ export class ApiService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...this.getAuthHeader()
                 },
                 body: JSON.stringify({
                     message: prompt,
@@ -187,9 +210,7 @@ export class ApiService {
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
-            }
+            await this.handleResponse(response);
 
             const data = await response.json();
             return data.answer || "Aucune réponse reçue du modèle de vision.";
@@ -200,19 +221,20 @@ export class ApiService {
     }
     async sendFeedback(messageId: string, reason: string, isValid: boolean) {
         try {
-            await fetch('/feedback', {
+            const response = await fetch('/feedback', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', ...this.getAuthHeader() },
                 body: JSON.stringify({ message_id: messageId, reason, is_valid: isValid })
             });
+            await this.handleResponse(response);
         } catch (error) {
             console.error("Feedback Error:", error);
         }
     }
 
     async getDocuments(): Promise<any[]> {
-        const response = await fetch('/api/documents');
-        if (!response.ok) throw new Error("Failed to fetch documents");
+        const response = await fetch('/api/documents', { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         return await response.json();
     }
 
@@ -224,33 +246,34 @@ export class ApiService {
         const response = await fetch(`/api/documents?path=${encodeURIComponent(path)}`, {
             method: 'POST',
             body: formData,
-            // fetch sets the Content-Type automatically for FormData (including boundary)
+            headers: { ...this.getAuthHeader() }
         });
 
-        if (!response.ok) throw new Error("Failed to upload document");
+        await this.handleResponse(response);
         return await response.json();
     }
 
     async deleteDocument(filePath: string): Promise<void> {
         const response = await fetch(`/api/documents/${encodeURIComponent(filePath)}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: { ...this.getAuthHeader() }
         });
-        if (!response.ok) throw new Error("Failed to delete document");
+        await this.handleResponse(response);
     }
 
     async startIngestion(targetDir: string = ""): Promise<any> {
         const response = await fetch('/api/documents/ingest', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...this.getAuthHeader() },
             body: JSON.stringify({ target_dir: targetDir })
         });
-        if (!response.ok) throw new Error("Failed to start ingestion");
+        await this.handleResponse(response);
         return await response.json();
     }
 
     async getIngestionStatus(): Promise<{ is_running: boolean, last_run: string | null, logs: string }> {
-        const response = await fetch('/api/documents/ingest/status');
-        if (!response.ok) throw new Error("Failed to fetch ingestion status");
+        const response = await fetch('/api/documents/ingest/status', { headers: { ...this.getAuthHeader() } });
+        await this.handleResponse(response);
         return await response.json();
     }
 }
