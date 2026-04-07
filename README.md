@@ -45,6 +45,10 @@ scripts/                   # Windows batch launchers
 
 > These tools are not included in the repo. Install them before anything else.
 
+#### Python 3.13+ (required)
+- Download: [python.org/downloads](https://www.python.org/downloads/windows/)
+- Make sure to check **"Add Python to PATH"** during installation.
+
 #### Tesseract OCR (required for image-based PDFs)
 - Download: [github.com/UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
 - Install path (default): `C:\Program Files\Tesseract-OCR\`
