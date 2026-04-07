@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Base de données (SOUVERAINETÉ)
+chroma_db/
+*.db
+
+# Documents (Si tu veux pas que les 312 PDFs soient sur le repo)
+# test_machines/ 
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environnement
+.env
+.env.local
+
+# Logs Historique
+data/sessions/
+logs/
+*.log
+
+# Fichiers binaires (installeurs) - télécharger manuellement, voir README
+extra/
+dummy.png

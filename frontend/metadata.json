@@ -1,0 +1,9 @@
+
+{
+  "name": "Lumina AI POC",
+  "description": "A high-end AI interface proof-of-concept featuring real-time chat, image analysis, and Google Search grounding, designed for modern enterprise workflows.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

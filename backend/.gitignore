@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+poppler/
+
+# Database
+chroma_db/
+*.db
+
+# Data
+data/
+
+# Fichiers de test locaux
+test_unstructured.pdf
+*.test.pdf
