@@ -48,7 +48,7 @@ scripts/                   # Windows batch launchers
 #### Tesseract OCR (required for image-based PDFs)
 - Download: [github.com/UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
 - Install path (default): `C:\Program Files\Tesseract-OCR\`
-- During install, select **English + French** language packs
+- During install, select language packs that apply **for your case**
 
 #### Poppler (required for PDF-to-image conversion)
 - Download: [github.com/oschwartz10612/poppler-windows/releases](https://github.com/oschwartz10612/poppler-windows/releases)
@@ -110,7 +110,6 @@ npm run dev
 ```bash
 cd backend
 python uvicorn_app.py
-# or: scripts\back.bat
 ```
 
 ### 5. Ingest your documents
@@ -118,7 +117,6 @@ python uvicorn_app.py
 ```bash
 cd backend
 python -m app.ingest
-# or: scripts\start_project.bat
 ```
 
 ---
