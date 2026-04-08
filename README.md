@@ -34,7 +34,7 @@ frontend/                  # React + Vite + TypeScript
   components/              # Chat UI, settings modal, expert review modal
   services/                # API client
 
-scripts/                   # Windows batch launchers
+scripts/                   # Windows batch & Linux shell launchers
 ```
 
 ---
@@ -44,19 +44,25 @@ scripts/                   # Windows batch launchers
 ### 1. System prerequisites
 
 > These tools are not included in the repo. Install them before anything else.
+> **Note for Linux users**: Use the package manager command suiting your distribution (e.g., `apt` for Debian/Ubuntu, `pacman` for Arch, `dnf` for Fedora).
 
 #### Python 3.13+ (required)
 - Download: [python.org/downloads](https://www.python.org/downloads/windows/)
 - Make sure to check **"Add Python to PATH"** during installation.
 
+#### Node.js 18+ (required for frontend)
+- Download: [nodejs.org](https://nodejs.org/en/download/)
+- Required to run the Vite development server and install frontend dependencies.
+
 #### Tesseract OCR (required for image-based PDFs)
-- Download: [github.com/UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki)
-- Install path (default): `C:\Program Files\Tesseract-OCR\`
-- During install, select language packs that apply **for your case**
+- **Windows**: Download [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Install path (default): `C:\Program Files\Tesseract-OCR\`. During install, select language packs that apply **for your case**.
+- **Linux (Ubuntu/Debian)**: `sudo apt install tesseract-ocr tesseract-ocr-fra tesseract-ocr-eng` (add other languages as needed)
+- **Linux (Arch)**: `sudo pacman -S tesseract tesseract-data-fra tesseract-data-eng`
 
 #### Poppler (required for PDF-to-image conversion)
-- Download: [github.com/oschwartz10612/poppler-windows/releases](https://github.com/oschwartz10612/poppler-windows/releases)
-- Unzip into: `backend/poppler/` (must contain `Library/bin/pdftoppm.exe`)
+- **Windows**: Download [poppler-windows](https://github.com/oschwartz10612/poppler-windows/releases). Unzip into: `backend/poppler/` (so it contains `Library/bin/pdftoppm.exe`).
+- **Linux (Ubuntu/Debian)**: `sudo apt install poppler-utils`
+- **Linux (Arch)**: `sudo pacman -S poppler`
 
 #### Ollama (local LLM runtime)
 - Download: [ollama.com/download](https://ollama.com/download)
@@ -67,7 +73,12 @@ scripts/                   # Windows batch launchers
 ```bash
 cd backend
 python -m venv .venv
+
+# Activate on Windows:
 .venv\Scripts\activate
+# Activate on Linux:
+source .venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
@@ -87,6 +98,8 @@ Copy `backend/.env.example` to `backend/.env` and fill in the values:
 
 ```env
 # Path to your documents folder
+# Windows example: "C:\\Path\\To\\Your\\Documents"
+# Linux example: "/home/user/Documents"
 DOCS_PATH = "C:\\Path\\To\\Your\\Documents"
 
 # LLM endpoint (Ollama default)
@@ -95,6 +108,8 @@ LLM_API_KEY = "ollama"
 CHAT_MODEL = "llama3"
 
 # Tesseract path
+# Windows example: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+# Linux example: "/usr/bin/tesseract"
 TESSERACT_PATH = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 # API security (leave empty for open dev mode)
@@ -122,6 +137,8 @@ python uvicorn_app.py
 cd backend
 python -m app.ingest
 ```
+
+> **Note**: You can also use the automated launchers provided in the `scripts/Windows/` or `scripts/Linux/` directories to simplify installation (`install_prerequisites`), running all services (`start_mvp`), and managing ingestion (`reset_ingestion`).
 
 ---
 
