@@ -2,11 +2,12 @@
 # Installation des prérequis backend (Python) et frontend (Node)
 
 echo "=== Backend : creation/maj de l'environnement virtuel ==="
-cd ../backend
+cd "$(dirname "$0")/../.." || exit
+cd backend
 
 if [ ! -d ".venv" ]; then
     echo "Creation du venv Python..."
-    python3 -m venv .venv
+    python3.13 -m venv .venv
 fi
 
 echo "Installation / mise a jour des dependances Python..."

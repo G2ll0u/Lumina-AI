@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ../backend
+cd "$(dirname "$0")/../.." || exit
+cd backend
 
 source .venv/bin/activate
 chroma run --path ./chroma_db &

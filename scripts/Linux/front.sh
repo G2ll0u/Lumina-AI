@@ -1,3 +1,4 @@
 #!/bin/bash
-cd ../frontend
+cd "$(dirname "$0")/../.." || exit
+cd frontend
 npm run dev

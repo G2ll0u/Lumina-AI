@@ -6,7 +6,7 @@ cd ../backend
 
 if not exist ".venv" (
     echo Creation du venv Python...
-    python -m venv .venv
+    py -3.13 -m venv .venv
 )
 
 echo Installation / mise a jour des dependances Python...

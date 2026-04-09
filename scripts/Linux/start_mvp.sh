@@ -11,7 +11,8 @@ OLLAMA_PID=$!
 
 echo ""
 echo "[2/3] Demarrage du Backend FastAPI..."
-cd ../backend
+cd "$(dirname "$0")/../.." || exit
+cd backend
 if [ -f "venv/bin/python" ]; then
     VENV_PYTHON="venv/bin/python"
 elif [ -f ".venv/bin/python" ]; then

@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ../backend
+cd "$(dirname "$0")/../.." || exit
+cd backend
 echo "=== Suppression de la base de donnees vectorielle existante ==="
 if [ -d "chroma_db" ]; then
     rm -rf chroma_db
