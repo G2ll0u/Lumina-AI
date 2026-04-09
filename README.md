@@ -46,7 +46,7 @@ scripts/                   # Windows batch & Linux shell launchers
 > These tools are not included in the repo. Install them before anything else.
 > **Note for Linux users**: Use the package manager command suiting your distribution (e.g., `apt` for Debian/Ubuntu, `pacman` for Arch, `dnf` for Fedora).
 
-#### Python 3.13+ (required)
+#### Python 3.13.x (required)
 - Download: [python.org/downloads](https://www.python.org/downloads/windows/)
 - Make sure to check **"Add Python to PATH"** during installation.
 
