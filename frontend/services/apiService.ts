@@ -27,7 +27,7 @@ export class ApiService {
         return response;
     }
 
-    async *streamChat(prompt: string, previousMessages: { role: string, content: string }[] = [], model: ModelType = ModelType.LLAMA_3B, useSearch: boolean = false, machineNumber?: string, sessionId?: string, settings?: LocalSettings) {
+    async *streamChat(prompt: string, previousMessages: { role: string, content: string }[] = [], model: ModelType = ModelType.PHI3, useSearch: boolean = false, machineNumber?: string, sessionId?: string, settings?: LocalSettings) {
         try {
             const body: any = {
                 message: prompt,
@@ -196,7 +196,7 @@ export class ApiService {
         await this.handleResponse(response);
     }
 
-    async analyzeImage(prompt: string, base64Image: string, model: ModelType = ModelType.LLAMA_3B): Promise<string> {
+    async analyzeImage(prompt: string, base64Image: string, model: ModelType = ModelType.PHI3): Promise<string> {
         try {
             const response = await fetch('/analyze_image', {
                 method: 'POST',

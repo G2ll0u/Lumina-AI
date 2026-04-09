@@ -30,7 +30,8 @@ export interface ChatSession {
 }
 
 export enum ModelType {
-  LLAMA_3B = 'llama3.2:3b',
+  PHI3 = 'phi3',
   MISTRAL_7B = 'mistral',
-  LLAVA_7B = 'llava:7b'
+  LLAVA_7B = 'llava:7b',
+  FLASH = 'gemini-1.5-flash'
 }

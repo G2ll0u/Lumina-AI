@@ -7,6 +7,18 @@ import { api } from './services/apiService';
 import { SettingsModal, LocalSettings, defaultSettings } from './components/SettingsModal';
 import { ExpertReviewModal } from './components/ExpertReviewModal';
 
+// Fallback for crypto.randomUUID() in non-secure contexts (HTTP via IP)
+const generateUUID = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
 const App: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
@@ -60,7 +72,7 @@ const App: React.FC = () => {
     }
     return defaultSettings;
   });
-  const [selectedModel, setSelectedModel] = useState<ModelType>(ModelType.LLAMA_3B);
+  const [selectedModel, setSelectedModel] = useState<ModelType>(ModelType.PHI3);
   const [selectedMachine, setSelectedMachine] = useState<string>("");
   const [useSearch, setUseSearch] = useState(false);
 
@@ -80,7 +92,7 @@ const App: React.FC = () => {
     if (!currentSessionId) return;
 
     const userMsg: Message = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       role: Role.USER,
       content: text,
       timestamp: new Date(),
@@ -93,7 +105,7 @@ const App: React.FC = () => {
         : s
     ));
 
-    const assistantMsgId = crypto.randomUUID();
+    const assistantMsgId = generateUUID();
     const initialAssistantMsg: Message = {
       id: assistantMsgId,
       role: Role.ASSISTANT,
@@ -363,7 +375,7 @@ const App: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setSelectedModel(selectedModel === ModelType.LLAMA_3B ? ModelType.MISTRAL_7B : ModelType.LLAMA_3B)}
+              onClick={() => setSelectedModel(selectedModel === ModelType.PHI3 ? ModelType.MISTRAL_7B : ModelType.PHI3)}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all text-xs font-medium ${selectedModel === ModelType.MISTRAL_7B ? 'bg-amber-500/10 border-amber-500/50 text-amber-400' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-300'}`}
               title={selectedModel === ModelType.MISTRAL_7B ? "Lent mais très exhaustif" : "Rapide mais limité aux bases"}
             >

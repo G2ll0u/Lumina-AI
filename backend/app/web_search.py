@@ -1,4 +1,4 @@
-from ddgs import DDGS
+from duckduckgo_search import DDGS
 
 def search_web_duckduckgo(query: str, max_results: int = 3) -> str:
     """
