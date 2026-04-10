@@ -238,3 +238,22 @@ async def analyze_image_with_llava(prompt: str, base64_image: str) -> str:
     except Exception as e:
         print(f"  > [LLaVA] API Error: {e}")
         return "Unexpected error during image analysis."
+async def get_ollama_status() -> dict:
+    """
+    Checks if Ollama is running and lists installed models.
+    """
+    url = f"{LLM_BASE_URL.rstrip('/')}/api/tags"
+    try:
+        async with httpx.AsyncClient(timeout=2.0) as client:
+            response = await client.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                models = [m["name"] for m in data.get("models", [])]
+                return {
+                    "Ollama_Running": True,
+                    "Llama_Installed": any("llama" in m.lower() for m in models),
+                    "Models": models
+                }
+            return {"Ollama_Running": False, "Llama_Installed": False, "Models": []}
+    except Exception:
+        return {"Ollama_Running": False, "Llama_Installed": False, "Models": []}

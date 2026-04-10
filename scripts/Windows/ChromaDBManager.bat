@@ -1,5 +1,5 @@
 @echo off
-cd ../backend
+cd ../../backend
 REM
 
 start "ChromaDB" cmd /k ".venv\Scripts\chroma.exe run --path ./chroma_db"

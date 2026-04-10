@@ -1,5 +1,5 @@
 @echo off
-cd ../backend
+cd /d "%~dp0..\..\backend"
 echo === Suppression de la base de donnees vectorielle existante ===
 if exist "chroma_db" (
     rmdir /s /q "chroma_db"

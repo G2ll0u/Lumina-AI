@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, model_validator
 import json
 from fastapi.responses import StreamingResponse, FileResponse
-from .llm_client import LLMError, stream_chat_completion, decompose_query, analyze_image_with_llava, generate_hyde_document
+from .llm_client import LLMError, stream_chat_completion, decompose_query, analyze_image_with_llava, generate_hyde_document, get_ollama_status
 from .auth import get_current_user
 from .rag import search_relevant_docs, build_bm25_index, add_verified_knowledge, get_all_verified_knowledge, delete_verified_knowledge
 from .web_search import search_web_duckduckgo
@@ -126,6 +126,13 @@ app.add_middleware(
 @app.get("/health")
 def healthcheck() -> dict:
     return {"status": "ok"}
+
+@app.get("/status")
+async def status_endpoint(user: dict = Depends(get_current_user)) -> dict:
+    """
+    Check if Ollama is running and get model list.
+    """
+    return await get_ollama_status()
 
 @app.get("/api/file")
 def get_local_file(path: str):

@@ -2,7 +2,7 @@
 REM Installation des prérequis backend (Python) et frontend (Node)
 
 echo === Backend : creation/maj de l'environnement virtuel ===
-cd ../backend
+cd /d "%~dp0..\..\backend"
 
 if not exist ".venv" (
     echo Creation du venv Python...
@@ -15,7 +15,7 @@ echo Installation / mise a jour des dependances Python...
 
 echo.
 echo === Frontend : installation des dependances npm ===
-cd ../frontend
+cd /d "%~dp0..\..\frontend"
 
 npm install
 

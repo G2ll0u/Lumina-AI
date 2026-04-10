@@ -11,12 +11,12 @@ start "Ollama Serve" cmd /k "echo Serveur Ollama & ollama serve"
 
 echo.
 echo [2/3] Demarrage du Backend FastAPI...
-cd ../backend
+cd /d "%~dp0..\..\backend"
 start "Backend FastAPI" cmd /k "echo Serveur API Backend... & if exist venv\Scripts\python.exe (venv\Scripts\python.exe uvicorn_app.py) else if exist .venv\Scripts\python.exe (.venv\Scripts\python.exe uvicorn_app.py) else (echo Environnement virtuel introuvable & pause)"
 
 echo.
 echo [3/3] Demarrage du Frontend React/Vite...
-cd ../frontend
+cd /d "%~dp0..\..\frontend"
 start "Frontend Vite" cmd /k "echo Serveur Web Frontend... & npm.cmd run dev"
 
 echo.
