@@ -1,4 +1,4 @@
-# 📘 Maintenance & Technical Guide - Lumina AI
+# Maintenance & Technical Guide - Lumina AI
 
 This document provides technical instructions for the long-term maintenance, scaling, and troubleshooting of the Lumina AI RAG pipeline.
 
