@@ -4,7 +4,7 @@ This document provides technical instructions for the long-term maintenance, sca
 
 ---
 
-## 🏗️ 1. Architecture Overview
+## 1. Architecture Overview
 
 Lumina AI is a **Hybrid Retrieval-Augmented Generation (RAG)** assistant. It combines vectorial and keyword search to ensure maximum precision in industrial environments.
 
@@ -25,7 +25,7 @@ Lumina AI is a **Hybrid Retrieval-Augmented Generation (RAG)** assistant. It com
 
 ---
 
-## 📦 2. Document Management
+## 2. Document Management
 
 ### Adding New Documents
 1. Place your folders in the `DOCS_PATH` (configured in `.env`).
@@ -42,7 +42,7 @@ The system automatically detects the best strategy based on the filename:
 
 ---
 
-## 🔐 3. Security & Authentication
+## 3. Security & Authentication
 
 The API is protected by a **Bearer Token** mechanism.
 - **Configuration**: Edit the `SECRET_KEY` variable in the `.env` file.
@@ -51,7 +51,7 @@ The API is protected by a **Bearer Token** mechanism.
 
 ---
 
-## 🛠️ 4. Common Maintenance Tasks
+## 4. Common Maintenance Tasks
 
 ### Update AI Models
 If the models are hallucinating or outdated, pull new versions:
@@ -74,7 +74,7 @@ You can use the **ChromaDB Manager** to inspect exactly what's inside the brain 
 
 ---
 
-## 🚨 5. Troubleshooting (FAQ)
+## 5. Troubleshooting (FAQ)
 
 | Issue | Cause | Solution |
 | :--- | :--- | :--- |
